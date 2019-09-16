@@ -2,14 +2,22 @@ package ru.models;
 
 import org.springframework.stereotype.Component;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-public class User implements Comparable<User> {
+@Entity(name = "User")
+@Table(name = "project_user")
+public class User implements Serializable  {
+    @Column(name ="name", unique = true)
     private String name;
+    @Column(name ="password")
     private String password;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<UserProduct> userProductList;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
 
     public void setUserProductList(List<UserProduct> userProductList) {
@@ -50,12 +58,6 @@ public class User implements Comparable<User> {
         this.name = name;
         this.password = password;
         this.userProductList = userProductList;
-    }
-
-
-    @Override
-    public int compareTo(User o) {
-        return name.compareTo(o.name);
     }
 
     @Override

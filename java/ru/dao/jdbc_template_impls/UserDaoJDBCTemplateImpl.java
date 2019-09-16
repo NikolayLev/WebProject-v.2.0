@@ -24,7 +24,8 @@ public class UserDaoJDBCTemplateImpl implements UserDao {
         try {
 
             List<User> userlist;
-            userlist = jdbcTemplate.query(SqlQueriesList.SQL_QUERIES_ENUM_STRING_MAP.get(SqlQueriesEnum.SQL_SELECT_BY_NAME), new UserRowMapper(), name);
+            userlist = jdbcTemplate.query(SqlQueriesList.SQL_QUERIES_ENUM_STRING_MAP.get(SqlQueriesEnum.SQL_SELECT_BY_NAME),
+                    new UserRowMapper(), name);
 
             return Optional.of(userlist.get(0));
 
@@ -103,7 +104,7 @@ class UserRowMapper implements RowMapper<User> {
         String productName = resultSet.getString("product_name");
         if (productName != null) {
             int price = resultSet.getInt("price");
-            UserProduct userProduct = new UserProduct(productName, price, name);
+            UserProduct userProduct = new UserProduct(productName, price, userList.get(id));
             userList.get(id).getUserProductList().add(userProduct);
         }
         return userList.get(id);
